@@ -13,6 +13,14 @@ end
 if defined?(ActiveRecord::ConnectionAdapters::MysqlAdapter) then
   ActiveRecord::ConnectionAdapters::MysqlColumn.send(:include, RedHillConsulting::Core::ActiveRecord::ConnectionAdapters::MysqlColumn)
   ActiveRecord::ConnectionAdapters::MysqlAdapter.send(:include, RedHillConsulting::Core::ActiveRecord::ConnectionAdapters::MysqlAdapter)
+  if ActiveRecord::Base.connection.send(:version)[0] < 5
+    #include MySql4Adapter
+    ActiveRecord::ConnectionAdapters::MysqlAdapter.send(:include, RedHillConsulting::Core::ActiveRecord::ConnectionAdapters::Mysql4Adapter)
+  else
+    #include MySql5Adapter
+    ActiveRecord::ConnectionAdapters::MysqlAdapter.send(:include, RedHillConsulting::Core::ActiveRecord::ConnectionAdapters::Mysql5Adapter)
+  end
+    
 end
 if defined?(ActiveRecord::ConnectionAdapters::SQLite3Adapter) then
   ActiveRecord::ConnectionAdapters::SQLite3Adapter.send(:include, RedHillConsulting::Core::ActiveRecord::ConnectionAdapters::Sqlite3Adapter)
